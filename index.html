@@ -1,108 +1,28 @@
-<!DOCTYPE html>
-<html lang="kk">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ҰБТ Дайындық | Пробный тесттер</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
-    <!-- Навигация -->
-    <nav class="navbar">
-        <div class="logo">ҰБТ<span>Дайындық</span></div>
-        <div class="nav-links">
-            <a href="#home">Басты</a>
-            <a href="#subjects">Пәндер</a>
-            <a href="#test">Тест</a>
-            <a href="#about">Туралы</a>
-        </div>
-    </nav>
-
-    <!-- Басты бөлім -->
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <h1>ҰБТ-ға <span>дайындал</span></h1>
-            <p class="subtitle">Пробный тесттер арқылы біліміңді тексер</p>
-            <p class="description">Математика • Қазақ тілі • Қазақстан тарихы • Ағылшын тілі</p>
-            <a href="#test" class="btn">Тестті бастау →</a>
-        </div>
-    </section>
-
-    <!-- Пәндер -->
-    <section id="subjects" class="subjects">
-        <div class="container">
-            <h2>Пәндер</h2>
-            <div class="subjects-grid">
-                <div class="subject-card">
-                    <div class="subject-icon">📐</div>
-                    <h3>Математика</h3>
-                    <p>Алгебра және геометрия</p>
-                </div>
-                <div class="subject-card">
-                    <div class="subject-icon">📖</div>
-                    <h3>Қазақ тілі</h3>
-                    <p>Грамматика және лексика</p>
-                </div>
-                <div class="subject-card">
-                    <div class="subject-icon">🏛️</div>
-                    <h3>Қазақстан тарихы</h3>
-                    <p>Негізгі даталар мен оқиғалар</p>
-                </div>
-                <div class="subject-card">
-                    <div class="subject-icon">🇬🇧</div>
-                    <h3>Ағылшын тілі</h3>
-                    <p>Грамматика және сөздік қор</p>
-                </div>
+<!-- Пәндер -->
+<section id="subjects" class="subjects">
+    <div class="container">
+        <h2>Пән таңдаңыз</h2>
+        <div class="subjects-grid">
+            <div class="subject-card" onclick="startSubject('math')">
+                <div class="subject-icon">📐</div>
+                <h3>Математика</h3>
+                <p>5 сұрақ • Қиын деңгей</p>
+            </div>
+            <div class="subject-card" onclick="startSubject('kazakh')">
+                <div class="subject-icon">📖</div>
+                <h3>Қазақ тілі</h3>
+                <p>5 сұрақ • Қиын деңгей</p>
+            </div>
+            <div class="subject-card" onclick="startSubject('history')">
+                <div class="subject-icon">🏛️</div>
+                <h3>Қазақстан тарихы</h3>
+                <p>5 сұрақ • Қиын деңгей</p>
+            </div>
+            <div class="subject-card" onclick="startSubject('english')">
+                <div class="subject-icon">🇬🇧</div>
+                <h3>Ағылшын тілі</h3>
+                <p>5 сұрақ • Қиын деңгей</p>
             </div>
         </div>
-    </section>
-
-    <!-- Тест бөлімі -->
-    <section id="test" class="test-section">
-        <div class="container">
-            <h2>Пробный тест</h2>
-            <div class="test-container">
-                <div id="quiz-start" class="quiz-start">
-                    <p>Қазіргі уақытта <strong>Математика</strong> пәнінен 5 сұрақтық пробный тест дайын.</p>
-                    <button id="startBtn" class="btn">Тестті бастау</button>
-                </div>
-
-                <div id="quiz" class="quiz hidden">
-                    <div class="quiz-header">
-                        <span id="question-number">Сұрақ 1 / 5</span>
-                        <span id="score-display">Ұпай: 0</span>
-                    </div>
-                    <div id="question-text" class="question-text"></div>
-                    <div id="options" class="options"></div>
-                    <button id="nextBtn" class="btn hidden">Келесі сұрақ →</button>
-                </div>
-
-                <div id="result" class="result hidden">
-                    <h3>Тест аяқталды!</h3>
-                    <div class="result-score" id="final-score">0 / 5</div>
-                    <p id="result-message"></p>
-                    <button id="restartBtn" class="btn">Қайта бастау</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Туралы -->
-    <section id="about" class="about">
-        <div class="container">
-            <h2>Сайт туралы</h2>
-            <div class="about-card">
-                <p>Бұл сайт ҰБТ-ға дайындалушыларға арналған. Мұнда сіз пробный тесттер тапсырып, білім деңгейіңізді тексере аласыз.</p>
-                <p>Тесттер үнемі жаңарып отырады. Кейінірек барлық негізгі пәндер қосылады.</p>
-            </div>
-        </div>
-    </section>
-
-    <footer>
-        <p>© 2026 ҰБТ Дайындық • Пробный тесттер</p>
-    </footer>
-
-    <script src="script.js"></script>
-</body>
-</html>
+    </div>
+</section>
