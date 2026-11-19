@@ -1,82 +1,105 @@
-let currentSubject = null;
-let currentQuestions = [];
+// Математика сұрақтары (пробный)
+const questions = [
+    {
+        question: "2x + 5 = 15 теңдеуінің шешімі қандай?",
+        options: ["x = 5", "x = 10", "x = 2", "x = 7"],
+        correct: 0
+    },
+    {
+        question: "Үшбұрыштың ішкі бұрыштарының қосындысы неге тең?",
+        options: ["90°", "180°", "270°", "360°"],
+        correct: 1
+    },
+    {
+        question: "√144 = ?",
+        options: ["10", "12", "14", "16"],
+        correct: 1
+    },
+    {
+        question: "5² + 3² = ?",
+        options: ["25", "34", "28", "15"],
+        correct: 1
+    },
+    {
+        question: "Тік төртбұрыштың ауданы қалай есептеледі?",
+        options: ["a + b", "a × b", "2(a + b)", "a² + b²"],
+        correct: 1
+    }
+];
+
 let currentQuestion = 0;
 let score = 0;
-let userAnswers = [];
+let selectedOption = null;
 
-function shuffle(array) {
-    return [...array].sort(() => Math.random() - 0.5);
-}
+const startBtn = document.getElementById('startBtn');
+const quizStart = document.getElementById('quiz-start');
+const quiz = document.getElementById('quiz');
+const result = document.getElementById('result');
+const questionText = document.getElementById('question-text');
+const optionsContainer = document.getElementById('options');
+const nextBtn = document.getElementById('nextBtn');
+const questionNumber = document.getElementById('question-number');
+const scoreDisplay = document.getElementById('score-display');
+const finalScore = document.getElementById('final-score');
+const resultMessage = document.getElementById('result-message');
+const restartBtn = document.getElementById('restartBtn');
 
-function startTest(subjectKey) {
-    currentSubject = subjects[subjectKey];
+startBtn.addEventListener('click', startQuiz);
+nextBtn.addEventListener('click', nextQuestion);
+restartBtn.addEventListener('click', restartQuiz);
 
-    currentQuestions = shuffle(
-        currentSubject.questions.map(question => {
-            const shuffledOptions = shuffle(
-                question.o.map((option, index) => ({
-                    text: option,
-                    isCorrect: index === question.a
-                }))
-            );
-
-            return {
-                q: question.q,
-                o: shuffledOptions.map(option => option.text),
-                a: shuffledOptions.findIndex(option => option.isCorrect)
-            };
-        })
-    );
-
+function startQuiz() {
+    quizStart.classList.add('hidden');
+    quiz.classList.remove('hidden');
     currentQuestion = 0;
     score = 0;
-    userAnswers = [];
-
     showQuestion();
 }
 
 function showQuestion() {
-    const question = currentQuestions[currentQuestion];
-
-    document.getElementById("test-container").innerHTML = `
-        <h2>${currentSubject.name}</h2>
-
-        <div class="progress">
-            Вопрос ${currentQuestion + 1} из ${currentQuestions.length}
-        </div>
-
-        <h3>${question.q}</h3>
-
-        <div class="answers">
-            ${question.o.map((option, index) => `
-                <button class="answer-btn"
-                    onclick="checkAnswer(${index})">
-                    ${String.fromCharCode(65 + index)}. ${option}
-                </button>
-            `).join("")}
-        </div>
-    `;
+    selectedOption = null;
+    nextBtn.classList.add('hidden');
+    
+    const q = questions[currentQuestion];
+    questionNumber.textContent = `Сұрақ ${currentQuestion + 1} / ${questions.length}`;
+    scoreDisplay.textContent = `Ұпай: ${score}`;
+    questionText.textContent = q.question;
+    
+    optionsContainer.innerHTML = '';
+    q.options.forEach((option, index) => {
+        const div = document.createElement('div');
+        div.className = 'option';
+        div.textContent = option;
+        div.addEventListener('click', () => selectOption(index, div));
+        optionsContainer.appendChild(div);
+    });
 }
 
-function checkAnswer(selected) {
-    const question = currentQuestions[currentQuestion];
-
-    const correct = selected === question.a;
-
-    if (correct) {
+function selectOption(index, element) {
+    if (selectedOption !== null) return;
+    
+    selectedOption = index;
+    const options = document.querySelectorAll('.option');
+    options.forEach(opt => opt.classList.remove('selected'));
+    element.classList.add('selected');
+    
+    const correctIndex = questions[currentQuestion].correct;
+    
+    if (index === correctIndex) {
+        element.classList.add('correct');
         score++;
+        scoreDisplay.textContent = `Ұпай: ${score}`;
+    } else {
+        element.classList.add('wrong');
+        options[correctIndex].classList.add('correct');
     }
+    
+    nextBtn.classList.remove('hidden');
+}
 
-    userAnswers.push({
-        question: question.q,
-        selected: question.o[selected],
-        correctAnswer: question.o[question.a],
-        correct: correct
-    });
-
+function nextQuestion() {
     currentQuestion++;
-
-    if (currentQuestion < currentQuestions.length) {
+    if (currentQuestion < questions.length) {
         showQuestion();
     } else {
         showResult();
@@ -84,68 +107,21 @@ function checkAnswer(selected) {
 }
 
 function showResult() {
-    const percent = Math.round(
-        (score / currentQuestions.length) * 100
-    );
-
-    document.getElementById("test-container").innerHTML = `
-        <div class="result">
-            <h2>Тест завершён!</h2>
-
-            <h3>${currentSubject.name}</h3>
-
-            <div class="score">
-                ${score} / ${currentQuestions.length}
-            </div>
-
-            <p>Результат: ${percent}%</p>
-
-            <p>
-                ${percent >= 80
-                    ? "Отличный результат!"
-                    : percent >= 50
-                    ? "Хороший результат, продолжай подготовку!"
-                    : "Нужно ещё потренироваться."}
-            </p>
-
-            <button onclick="showReview()">
-                Разбор ошибок
-            </button>
-
-            <button onclick="startTest(
-                '${Object.keys(subjects).find(
-                    key => subjects[key] === currentSubject
-                )}'
-            )">
-                Пройти заново
-            </button>
-        </div>
-    `;
+    quiz.classList.add('hidden');
+    result.classList.remove('hidden');
+    
+    finalScore.textContent = `${score} / ${questions.length}`;
+    
+    if (score === 5) {
+        resultMessage.textContent = "Керемет! Өте жақсы нәтиже 🔥";
+    } else if (score >= 3) {
+        resultMessage.textContent = "Жақсы! Тағы да жаттығыңыз 👍";
+    } else {
+        resultMessage.textContent = "Қайталап көріңіз, сізге сәттілік!";
+    }
 }
 
-function showReview() {
-    const mistakes = userAnswers.filter(answer => !answer.correct);
-
-    document.getElementById("test-container").innerHTML = `
-        <h2>Разбор ошибок</h2>
-
-        ${mistakes.length === 0
-            ? "<h3>Поздравляем! Все ответы правильные 🎉</h3>"
-            : mistakes.map((mistake, index) => `
-                <div class="review-item">
-                    <h3>${index + 1}. ${mistake.question}</h3>
-
-                    <p>Твой ответ: ${mistake.selected}</p>
-
-                    <p>
-                        Правильный ответ:
-                        <strong>${mistake.correctAnswer}</strong>
-                    </p>
-                </div>
-            `).join("")}
-
-        <button onclick="location.reload()">
-            На главную
-        </button>
-    `;
+function restartQuiz() {
+    result.classList.add('hidden');
+    quizStart.classList.remove('hidden');
 }
